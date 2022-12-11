@@ -6,7 +6,7 @@ import json
 import smtplib
 from email.message import EmailMessage
 
-STATUS='Pendentes'
+STATUS='Pendente'
 
 def update_current_nfs():
     load_dotenv()
@@ -21,44 +21,49 @@ def update_current_nfs():
     with open('nfs.json','w') as f:
         json.dump(res.json(),f)
 
-    return res.json()
-
-def filter_nfs_list(updated_nfs):
+def extract_id_from_nfs_updated(updated_nfs):
     list_checked=[]
-    if updated_nfs==True:
-        input_dict=json.loads(updated_nfs)
+    input_dict=json.load(updated_nfs)
+    input_dict=input_dict['retorno']['notasfiscais']
+    filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == STATUS)]
+    for i in filtered:
+        list_checked.append(i['notafiscal']['id'])
+    return list_checked
+
+
+def extract_id_from_local(updated_nfs):
+    list_checked=[]
+    with open('nfs.json','r',encoding='utf-8') as f:
+        input_dict=json.load(f)
         input_dict=input_dict['retorno']['notasfiscais']
         filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == STATUS)]
         for i in filtered:
-            list_checked.append(i['notafiscal']['chaveAcesso'])
-        return list_checked
-    else:
-        with open('nfs.json','r',encoding='utf-8') as f:
-            input_dict=json.load(f)
-            input_dict=input_dict['retorno']['notasfiscais']
-            filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == STATUS)]
-            for i in filtered:
-                list_checked.append(i['notafiscal']['chaveAcesso'])
-        return list_checked
+            list_checked.append(i['notafiscal']['id'])
+    return list_checked
 
 
 def create_checked_list():
-    list_checked=filter_nfs_list(update_current_nfs())
+    list_checked=extract_id_from_local(update_current_nfs())
     with open('checked.json','w') as f:
         f.write(json.dumps(list_checked))
 
 def check_current_list():
-    updated_nfs=update_current_nfs()
-    filtered_nfs_list=filter_nfs_list(updated_nfs)
-
-    with open('checked.json','r') as f:
-        checked_list=json.load(f)
-        if filtered_nfs_list==checked_list:
-            print('nada mudou')
-        else:
-            print('mudou algo')
-            send_email_notif()
-            create_checked_list()
+    update_current_nfs()
+    with open('nfs.json','r',encoding='utf-8') as updated_nfs:
+        with open('checked.json','r') as f:
+            new_nfs_ids=extract_id_from_nfs_updated(updated_nfs)
+            old_nfs_ids=json.load(f)
+            if new_nfs_ids==old_nfs_ids:
+                print('nada mudou')
+            else:
+                if not new_nfs_ids:
+                    print('nao tem nenhuma nf no momento')
+                    create_checked_list()
+                else:
+                    print('tem coisa na lista nova')
+                    print('enviando email')
+                    send_email_notif()
+                    create_checked_list()
 
 def check_file_exists():
     Thefile = Path('checked.json')
