@@ -6,7 +6,6 @@ import json
 import smtplib
 from email.message import EmailMessage
 
-STATUS='Pendente'
 
 def update_current_nfs():
     load_dotenv()
@@ -25,7 +24,7 @@ def extract_id_from_nfs_updated(updated_nfs):
     list_checked=[]
     input_dict=json.load(updated_nfs)
     input_dict=input_dict['retorno']['notasfiscais']
-    filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == STATUS)]
+    filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == os.getenv('STATUS'))]
     for i in filtered:
         list_checked.append(i['notafiscal']['id'])
     return list_checked
@@ -36,7 +35,7 @@ def extract_id_from_local(updated_nfs):
     with open('nfs.json','r',encoding='utf-8') as f:
         input_dict=json.load(f)
         input_dict=input_dict['retorno']['notasfiscais']
-        filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == STATUS)]
+        filtered=[x for x in input_dict if (x['notafiscal']['situacao'] == os.getenv('STATUS'))]
         for i in filtered:
             list_checked.append(i['notafiscal']['id'])
     return list_checked
