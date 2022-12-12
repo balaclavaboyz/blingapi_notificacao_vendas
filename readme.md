@@ -16,3 +16,5 @@ coloquei STATUS Pendente, porque eh o unico momento que a venda eh concretizado
 primeiro tem que rodar pelo menos uma vez pra salvar as informacoes em arquivos antes de rodar ele definidamente
 
 usar o scheduler do windows para a execucao automatico
+
+no scheduler do windows, coloquei pra rodar cada 15 min por 8 horas
