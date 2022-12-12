@@ -1,5 +1,8 @@
 # bomdia
 
+## para que server isso
+
+toda vez que uma nota fiscal eh gerado e mandado na aba de vendas e dentro de nota fiscais, com o status de Pendente, eh mandado um email com o aviso.
 
 o unico arquivo que eh preciso criar eh o .env, la voce colocar as variaveis APIKEY, MEUEMAIL, MINHASENHA e STATUS
 ```
