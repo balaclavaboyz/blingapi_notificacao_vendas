@@ -93,6 +93,8 @@ def send_email_notif():
 if __name__=="__main__":
     check_file_exists() 
     while(True):
+        print('=====')
         print(datetime.datetime.now())
         check_current_list()
         time.sleep(600)
+        print('\n')
