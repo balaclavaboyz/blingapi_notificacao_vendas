@@ -17,6 +17,6 @@ primeiro tem que rodar pelo menos uma vez pra salvar as informacoes em arquivos 
 
 usar o scheduler do windows para a execucao automatico
 
-no scheduler do windows, coloquei pra rodar cada 15 min por 8 horas
+scheduler no windows nao funcionou comigo. entao fiz sleep mesmo
 
 a parte do MINHASENHA tem que pegar no conf da google, com 2fa e senha de app unico

@@ -1,3 +1,5 @@
+import time
+import datetime
 import requests
 from dotenv import load_dotenv
 from pathlib import Path
@@ -90,4 +92,7 @@ def send_email_notif():
 
 if __name__=="__main__":
     check_file_exists() 
-    check_current_list()
+    while(True):
+        print(datetime.datetime.now())
+        check_current_list()
+        time.sleep(600)
